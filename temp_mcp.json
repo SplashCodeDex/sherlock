@@ -1,0 +1,90 @@
+{
+  "mcpServers": {
+    "shadcnui": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.shadcn.io/api/mcp"
+      ],
+      "alwaysAllow": [
+        "getComponents",
+        "getComponent"
+      ]
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "alwaysAllow": [
+        "sequentialthinking"
+      ]
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ]
+    },
+    "n8n-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "n8n-mcp@2.12.2"
+      ],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true"
+      }
+    },
+    "firebase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "firebase-tools@latest",
+        "experimental:mcp",
+        "--dir",
+        "/home/user/PlanMyLife",
+        "--only",
+        "auth,firestore,storage"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp"
+    },
+    "gitmcp": {
+      "url": "https://gitmcp.io/docs"
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ],
+      "alwaysAllow": [
+        "get_project_registries",
+        "search_items_in_registries",
+        "view_items_in_registries"
+      ],
+      "timeout": 60
+    },
+    "@magicuidesign/mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@magicuidesign/mcp@latest"
+      ],
+      "alwaysAllow": []
+    }
+  }
+}
