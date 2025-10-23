@@ -23,7 +23,7 @@ import os
 import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from json import loads as json_loads
-from time import monotonic
+from time import monotonic, sleep
 from typing import Optional
 
 import requests
@@ -235,7 +235,7 @@ def sherlock(
         # A user agent is needed because some sites don't return the correct
         # information since they think that we are bots (Which we actually are...)
         headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:132.0) Gecko/20100101 Firefox/132.0",
         }
 
         if "headers" in net_info:
@@ -334,6 +334,9 @@ def sherlock(
 
         # Add this site's results into final dictionary with all the other results.
         results_total[social_network] = results_site
+
+    # Rate limiting: sleep between requests to avoid IP bans
+    sleep(0.5)
 
     # Open the file containing account links
     for social_network, net_info in site_data.items():
@@ -527,6 +530,38 @@ def timeout_check(value):
     return float_value
 
 
+def proxy_check(value):
+    """Check Proxy Argument.
+
+    Validates proxy URL format.
+
+    Keyword Arguments:
+    value                  -- Proxy URL string.
+
+    Return Value:
+    String proxy URL if valid.
+
+    NOTE:  Will raise an exception if the proxy URL is invalid.
+    """
+    if not value:
+        return value
+
+    # Basic validation for proxy URL formats
+    valid_schemes = ['http://', 'https://', 'socks4://', 'socks5://']
+    if not any(value.startswith(scheme) for scheme in valid_schemes):
+        raise ArgumentTypeError(
+            f"Invalid proxy URL: {value}. Must start with http://, https://, socks4://, or socks5://"
+        )
+
+    # Check for basic URL structure
+    if '://' not in value or value.count('://') > 1:
+        raise ArgumentTypeError(
+            f"Invalid proxy URL format: {value}"
+        )
+
+    return value
+
+
 def handler(signal_received, frame):
     """Exit gracefully without throwing errors
 
@@ -535,7 +570,7 @@ def handler(signal_received, frame):
     sys.exit(0)
 
 
-def main():
+def main() -> None:
     parser = ArgumentParser(
         formatter_class=RawDescriptionHelpFormatter,
         description=f"{__longname__} (Version {__version__})",
@@ -596,6 +631,7 @@ def main():
         metavar="PROXY_URL",
         action="store",
         dest="proxy",
+        type=proxy_check,
         default=None,
         help="Make requests over a proxy. e.g. socks5://127.0.0.1:1080",
     )
@@ -675,15 +711,6 @@ def main():
         help="Include checking of NSFW sites from default list.",
     )
 
-    # TODO deprecated in favor of --txt, retained for workflow compatibility, to be removed
-    # in future release
-    parser.add_argument(
-        "--no-txt",
-        action="store_true",
-        dest="no_txt",
-        default=False,
-        help="Disable creation of a txt file - WILL BE DEPRECATED",
-    )
 
     parser.add_argument(
         "--txt",
