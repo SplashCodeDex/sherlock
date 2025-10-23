@@ -45,3 +45,4 @@ tests/.excluded_sites
 
 # Vim swap files
 *.swp
+node_modules/
