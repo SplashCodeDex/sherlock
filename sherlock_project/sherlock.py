@@ -737,12 +737,12 @@ def main() -> None:
     try:
         latest_release_raw = requests.get(forge_api_latest_release, timeout=10).text
         latest_release_json = json_loads(latest_release_raw)
-        latest_remote_tag = latest_release_json["tag_name"]
+        latest_remote_tag = latest_release_json.get("tag_name")
 
-        if latest_remote_tag[1:] != __version__:
+        if latest_remote_tag and latest_remote_tag.lstrip('v') != __version__:
             print(
-                f"Update available! {__version__} --> {latest_remote_tag[1:]}"
-                f"\n{latest_release_json['html_url']}"
+                f"Update available! {__version__} --> {latest_remote_tag.lstrip('v')}"
+                f"\n{latest_release_json.get('html_url', '')}"
             )
 
     except Exception as error:
