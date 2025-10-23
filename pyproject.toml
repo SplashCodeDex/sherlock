@@ -13,12 +13,10 @@ version = "0"
 description = "Hunt down social media accounts by username across social networks"
 license = "MIT"
 authors = [
-    "Siddharth Dushantha <siddharth.dushantha@gmail.com>"
+    "CodeDeX"
 ]
 maintainers = [
-    "Paul Pfeister <code@pfeister.dev>",
-    "Matheus Felipe <matheusfelipeog@protonmail.com>",
-    "Sondre Karlsen Dyrnes <sondre@villdyr.no>"
+    "CodeDeX"
 ]
 readme = "docs/pyproject/README.md"
 packages = [ { include = "sherlock_project"} ]
@@ -32,12 +30,12 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Security"
 ]
-homepage = "https://sherlockproject.xyz/"
-repository = "https://github.com/sherlock-project/sherlock"
+homepage = "https://github.com/SplashCodeDex/sherlock"
+repository = "https://github.com/SplashCodeDex/sherlock"
 
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/sherlock-project/sherlock/issues"
+"Bug Tracker" = "https://github.com/SplashCodeDex/sherlock/issues"
 
 [tool.poetry.dependencies]
 python = "^3.9"

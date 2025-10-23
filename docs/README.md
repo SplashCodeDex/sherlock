@@ -121,8 +121,8 @@ Read more about the [Sherlock Actor](../.actor/README.md), including how to use 
 
 Thank you to everyone who has contributed to Sherlock! ❤️
 
-<a href="https://github.com/sherlock-project/sherlock/graphs/contributors">
-  <img src="https://contrib.rocks/image?&columns=25&max=10000&&repo=sherlock-project/sherlock" noZoom />
+<a href="https://github.com/SplashCodeDex/sherlock/graphs/contributors">
+  <img src="https://contrib.rocks/image?&columns=25&max=10000&&repo=SplashCodeDex/sherlock" noZoom />
 </a>
 
 ## Star history
@@ -130,13 +130,13 @@ Thank you to everyone who has contributed to Sherlock! ❤️
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=sherlock-project/sherlock&type=Date&theme=dark" />
   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=sherlock-project/sherlock&type=Date" />
-  <img alt="Sherlock Project Star History Chart" src="https://api.star-history.com/svg?repos=sherlock-project/sherlock&type=Date" />
+  <img alt="Sherlock Project Star History Chart" src="https://api.star-history.com/svg?repos=SplashCodeDex/sherlock&type=Date" />
 </picture>
 
 ## License
 
 MIT © Sherlock Project<br/>
-Original Creator - [Siddharth Dushantha](https://github.com/sdushantha)
+Creator - CodeDeX
 
 <!-- Reference Links -->
 

@@ -2,11 +2,11 @@
 
 <p align=center>
   <br>
-  <a href="https://sherlock-project.github.io/" target="_blank"><img src="https://www.kali.org/tools/sherlock/images/sherlock-logo.svg" width="25%"/></a>
+  <a href="https://github.com/SplashCodeDex/sherlock" target="_blank"><img src="https://www.kali.org/tools/sherlock/images/sherlock-logo.svg" width="25%"/></a>
   <br>
-  <strong><span>Hunt down social media accounts by username across <a href="https://github.com/sherlock-project/sherlock/blob/master/sites.md">400+ social networks</a></span></strong>
+  <strong><span>Hunt down social media accounts by username across <a href="https://github.com/SplashCodeDex/sherlock/blob/master/sites.md">400+ social networks</a></span></strong>
   <br><br>
-  <span>Additional documentation can be found at our <a href="https://github.com/sherlock-project/sherlock/">GitHub repository</a></span>
+  <span>Additional documentation can be found at our <a href="https://github.com/SplashCodeDex/sherlock/">GitHub repository</a></span>
   <br>
 </p>
 
