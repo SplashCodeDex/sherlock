@@ -151,15 +151,7 @@ export function SearchResults({ data, loading }: SearchResultsProps) {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-2">
-                    <div className="w-16 bg-gray-200 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full ${
-                          site.score >= 80 ? 'bg-green-600' :
-                          site.score >= 60 ? 'bg-yellow-600' : 'bg-red-600'
-                        }`}
-                        style={{ width: `${site.score}%` }}
-                      ></div>
-                    </div>
+                    <Progress value={site.score} className="w-16 h-2" />
                     <span className="text-sm font-medium">{site.score}%</span>
                   </div>
                 </TableCell>

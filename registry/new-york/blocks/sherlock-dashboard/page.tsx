@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SecurityScanner } from "./components/security-scanner"
 import { VulnerabilityReport } from "./components/vulnerability-report"
 import { SiteMonitor } from "./components/site-monitor"
 import { RiskAssessment } from "./components/risk-assessment"
-import { useSecurityAnalysis } from "./hooks/use-security-analysis"
+import { useSecurityAnalysis } from "./hooks/use-sherlock-data"
 import { formatSecurityDate } from "./lib/format-date"
 import { Search, Shield, AlertTriangle, CheckCircle, Clock, Activity, Scan, FileSearch, TrendingUp } from "lucide-react"
 
@@ -90,16 +91,17 @@ export default function SherlockSecurityDashboard() {
                 />
               </div>
               <div className="flex space-x-2">
-                <select
-                  value={scanType}
-                  onChange={(e) => setScanType(e.target.value)}
-                  className="flex-1 p-3 border rounded-md bg-background"
-                >
-                  <option value="quick">Quick Scan</option>
-                  <option value="comprehensive">Comprehensive</option>
-                  <option value="api">API Security</option>
-                  <option value="compliance">Compliance Check</option>
-                </select>
+                <Select value={scanType} onValueChange={setScanType}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Select scan type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="quick">Quick Scan</SelectItem>
+                    <SelectItem value="comprehensive">Comprehensive</SelectItem>
+                    <SelectItem value="api">API Security</SelectItem>
+                    <SelectItem value="compliance">Compliance Check</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Button
                   onClick={handleStartScan}
                   disabled={loading || !targetUrl.trim()}
@@ -122,23 +124,60 @@ export default function SherlockSecurityDashboard() {
             </div>
 
             {/* Scan Options */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
-                SSL/TLS Analysis
-              </Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
-                Header Security
-              </Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
-                OWASP Top 10
-              </Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
-                Malware Detection
-              </Badge>
-              <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
-                DNS Security
-              </Badge>
-            </div>
+            <TooltipProvider>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
+                      SSL/TLS Analysis
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Analyze SSL certificate validity and TLS configuration</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
+                      Header Security
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Check security headers like CSP, HSTS, and X-Frame-Options</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
+                      OWASP Top 10
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Scan for OWASP Top 10 vulnerabilities</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
+                      Malware Detection
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Detect malware and malicious scripts</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-primary/10">
+                      DNS Security
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Analyze DNS configuration and security</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           </CardContent>
         </Card>
 
