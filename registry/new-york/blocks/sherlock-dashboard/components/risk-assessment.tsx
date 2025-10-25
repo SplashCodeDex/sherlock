@@ -12,7 +12,8 @@ import {
   FileText,
   Calendar,
   Users,
-  DollarSign
+  DollarSign,
+  CheckCircle
 } from "lucide-react"
 
 interface RiskAssessmentProps {

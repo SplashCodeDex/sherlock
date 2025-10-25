@@ -1,0 +1,4 @@
+2025-10-24 04:22:34,218 - watchfiles.main - INFO - 5 changes detected
+2025-10-24 04:22:34,229 - main - INFO - Starting Sherlock Security Center API
+2025-10-24 04:22:34,270 - main - INFO - Database tables created/verified
+2025-10-24 04:22:34,604 - main - INFO - Redis connection established

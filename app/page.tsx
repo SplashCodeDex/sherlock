@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -8,22 +8,27 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Spinner } from "@/components/ui/spinner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SecurityScanner } from "./components/security-scanner"
 import { VulnerabilityReport } from "./components/vulnerability-report"
 import { SiteMonitor } from "./components/site-monitor"
 import { RiskAssessment } from "./components/risk-assessment"
-import { ScanHistory } from "./components/scan-history"
+import { ErrorBoundary } from "./components/error-boundary"
 import { useSecurityAnalysis } from "./hooks/use-sherlock-data"
 import { formatSecurityDate } from "./lib/format-date"
-import { Search, Shield, AlertTriangle, CheckCircle, Clock, Activity, Scan, FileSearch, TrendingUp } from "lucide-react"
+import { SecurityValidator } from "./lib/validation"
+import { useRateLimit, rateLimiters } from "./lib/rate-limit"
+import { Search, Shield, AlertTriangle, CheckCircle, Clock, Activity, Scan, FileSearch, TrendingUp, AlertCircle } from "lucide-react"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function SherlockSecurityDashboard() {
   const [targetUrl, setTargetUrl] = useState("")
   const [scanType, setScanType] = useState("comprehensive")
-  const { analysis, loading, error, progress, startScan, monitorSites } = useSecurityAnalysis()
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const [lastRequestTime, setLastRequestTime] = useState(0)
+  const { checkRateLimit } = useRateLimit(rateLimiters.scanning, 'scan-requests')
+
+  const { analysis, loading, error, startScan, monitorSites } = useSecurityAnalysis()
 
   const handleStartScan = async () => {
     if (targetUrl.trim()) {
@@ -112,10 +117,10 @@ export default function SherlockSecurityDashboard() {
                   className="px-8"
                 >
                   {loading ? (
-                    <div className="flex items-center">
-                      <Spinner className="h-4 w-4 mr-2" />
+                    <>
+                      <Clock className="h-4 w-4 mr-2 animate-spin" />
                       Scanning...
-                    </div>
+                    </>
                   ) : (
                     <>
                       <Search className="h-4 w-4 mr-2" />
@@ -125,13 +130,6 @@ export default function SherlockSecurityDashboard() {
                 </Button>
               </div>
             </div>
-
-            {loading && (
-              <div className="w-full mt-4">
-                <Progress value={progress} className="h-2" />
-                <p className="text-center text-sm text-muted-foreground mt-1">{progress}% Complete</p>
-              </div>
-            )}
 
             {/* Scan Options */}
             <TooltipProvider>
@@ -277,7 +275,7 @@ export default function SherlockSecurityDashboard() {
                 </div>
 
                 {/* Security Scanner Component */}
-                <ScanHistory analysis={analysis} />
+                <SecurityScanner analysis={analysis} loading={loading} />
               </div>
 
               {/* Site Monitor Sidebar */}

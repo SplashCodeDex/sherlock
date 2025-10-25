@@ -27,21 +27,23 @@ interface SecurityAnalysis {
 }
 
 interface SecurityHookReturn {
-  analysis: SecurityAnalysis[]
-  loading: boolean
-  error: string | null
-  startScan: (url: string, scanType: string) => Promise<void>
-  monitorSites: (urls: string[]) => Promise<void>
-  getScanResults: (scanId: string) => SecurityAnalysis | null
+  analysis: SecurityAnalysis[];
+  loading: boolean;
+  error: string | null;
+  progress: number; // Add progress here
+  startScan: (url: string, scanType: string) => Promise<void>;
+  monitorSites: (urls: string[]) => Promise<void>;
+  getScanResults: (scanId: string) => SecurityAnalysis | null;
 }
 
 export function useSecurityAnalysis(): SecurityHookReturn {
-  const [analysis, setAnalysis] = useState<SecurityAnalysis[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [analysis, setAnalysis] = useState<SecurityAnalysis[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0); // Initialize progress
 
-  // Realistic mock data for security analysis
-  const mockAnalysis: SecurityAnalysis[] = [
+  useEffect(() => {
+    const mockAnalysis: SecurityAnalysis[] = [
     {
       id: 'scan-001',
       url: 'https://example.com',
@@ -129,25 +131,28 @@ export function useSecurityAnalysis(): SecurityHookReturn {
       },
       technologies: ['Apache', 'PHP', 'MySQL', 'WordPress']
     }
-  ]
-
-  useEffect(() => {
+  ];
     // Initialize with mock security analysis data
     setAnalysis(mockAnalysis)
   }, [])
 
   const startScan = async (url: string, scanType: string) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
+    setProgress(0); // Reset progress
 
     try {
       // Validate URL
       if (!isValidUrl(url)) {
-        throw new Error('Invalid URL format. Please enter a valid website URL.')
+        throw new Error('Invalid URL format. Please enter a valid website URL.');
       }
 
-      // Simulate comprehensive security scan
-      await new Promise(resolve => setTimeout(resolve, 3000))
+      // Simulate comprehensive security scan with progress updates
+      const totalSteps = 10;
+      for (let i = 0; i <= totalSteps; i++) {
+        await new Promise(resolve => setTimeout(resolve, 200)); // Simulate work
+        setProgress(Math.floor((i / totalSteps) * 100));
+      }
 
       // Generate realistic scan results based on URL and scan type
       const newScan: SecurityAnalysis = {
@@ -177,75 +182,77 @@ export function useSecurityAnalysis(): SecurityHookReturn {
           'x-powered-by': 'PHP/8.1.0'
         },
         technologies: ['nginx', 'PHP', 'React']
-      }
+      };
 
-      setAnalysis(prev => [newScan, ...prev])
+      setAnalysis(prev => [newScan, ...prev]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Security scan failed. Please try again.")
+      setError(err instanceof Error ? err.message : "Security scan failed. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
+      setProgress(0); // Reset progress after scan
     }
-  }
+  };
 
   const monitorSites = async (urls: string[]) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
 
     try {
       // Simulate monitoring setup
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       // In a real implementation, this would set up continuous monitoring
-      console.log('Monitoring sites:', urls)
+      console.log('Monitoring sites:', urls);
     } catch (err) {
-      setError("Failed to setup monitoring. Please try again.")
+      setError("Failed to setup monitoring. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getScanResults = (scanId: string): SecurityAnalysis | null => {
-    return analysis.find(scan => scan.id === scanId) || null
-  }
+    return analysis.find(scan => scan.id === scanId) || null;
+  };
 
   return {
     analysis,
     loading,
     error,
+    progress, // Return progress
     startScan,
     monitorSites,
-    getScanResults
-  }
+    getScanResults,
+  };
 }
 
 // Utility functions
 function isValidUrl(string: string): boolean {
   try {
-    const url = new URL(string)
-    return url.protocol === 'http:' || url.protocol === 'https:'
+    const url = new URL(string);
+    return url.protocol === 'http:' || url.protocol === 'https:';
   } catch (_) {
-    return false
+    return false;
   }
 }
 
 function extractDomain(url: string): string {
   try {
-    return new URL(url).hostname
+    return new URL(url).hostname;
   } catch (_) {
-    return 'unknown-domain.com'
+    return 'unknown-domain.com';
   }
 }
 
 function getRandomRiskLevel(): SecurityAnalysis['riskLevel'] {
-  const levels: SecurityAnalysis['riskLevel'][] = ['low', 'medium', 'high', 'critical']
-  const weights = [0.4, 0.35, 0.2, 0.05] // Higher probability for lower risk levels
+  const levels: SecurityAnalysis['riskLevel'][] = ['low', 'medium', 'high', 'critical'];
+  const weights = [0.4, 0.35, 0.2, 0.05]; // Higher probability for lower risk levels
 
-  let random = Math.random()
+  let random = Math.random();
   for (let i = 0; i < levels.length; i++) {
-    random -= weights[i]
-    if (random <= 0) return levels[i]
+    random -= weights[i];
+    if (random <= 0) return levels[i];
   }
-  return 'medium'
+  return 'medium';
 }
 
 function generateFindings(scanType: string): string[] {
@@ -275,12 +282,12 @@ function generateFindings(scanType: string): string[] {
       'Data protection assessment',
       'Privacy policy review'
     ]
-  }
+  };
 
-  const templates = findingTemplates[scanType as keyof typeof findingTemplates] || findingTemplates.comprehensive
-  const numFindings = Math.floor(Math.random() * 4) + 2 // 2-5 findings
+  const templates = findingTemplates[scanType as keyof typeof findingTemplates] || findingTemplates.comprehensive;
+  const numFindings = Math.floor(Math.random() * 4) + 2; // 2-5 findings
 
   return templates
     .sort(() => Math.random() - 0.5)
-    .slice(0, numFindings)
+    .slice(0, numFindings);
 }
